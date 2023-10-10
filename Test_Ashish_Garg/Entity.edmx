@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DB_Ashish_GargModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="ServiceTaken" Type="int" />
+          <Property Name="ContactNo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblServiceProvider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProviderName" Type="varchar" MaxLength="50" />
+          <Property Name="ServiceName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblServiceProviderCity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceProviderId" Type="int" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_tblCustomer_tblCustomer">
+          <End Role="tblServiceProvider" Type="Self.tblServiceProvider" Multiplicity="0..1" />
+          <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblServiceProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblCustomer">
+              <PropertyRef Name="ServiceTaken" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblServiceProviderCity_tblServiceProvider">
+          <End Role="tblServiceProvider" Type="Self.tblServiceProvider" Multiplicity="0..1" />
+          <End Role="tblServiceProviderCity" Type="Self.tblServiceProviderCity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblServiceProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblServiceProviderCity">
+              <PropertyRef Name="ServiceProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB_Ashish_GargModelStoreContainer">
+          <EntitySet Name="tblCustomer" EntityType="Self.tblCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblServiceProvider" EntityType="Self.tblServiceProvider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblServiceProviderCity" EntityType="Self.tblServiceProviderCity" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblCustomer_tblCustomer" Association="Self.FK_tblCustomer_tblCustomer">
+            <End Role="tblServiceProvider" EntitySet="tblServiceProvider" />
+            <End Role="tblCustomer" EntitySet="tblCustomer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblServiceProviderCity_tblServiceProvider" Association="Self.FK_tblServiceProviderCity_tblServiceProvider">
+            <End Role="tblServiceProvider" EntitySet="tblServiceProvider" />
+            <End Role="tblServiceProviderCity" EntitySet="tblServiceProviderCity" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DB_Ashish_GargModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceTaken" Type="Int32" />
+          <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblServiceProvider" Relationship="Self.FK_tblCustomer_tblCustomer" FromRole="tblCustomer" ToRole="tblServiceProvider" />
+        </EntityType>
+        <EntityType Name="tblServiceProvider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProviderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblCustomers" Relationship="Self.FK_tblCustomer_tblCustomer" FromRole="tblServiceProvider" ToRole="tblCustomer" />
+          <NavigationProperty Name="tblServiceProviderCities" Relationship="Self.FK_tblServiceProviderCity_tblServiceProvider" FromRole="tblServiceProvider" ToRole="tblServiceProviderCity" />
+        </EntityType>
+        <EntityType Name="tblServiceProviderCity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceProviderId" Type="Int32" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblServiceProvider" Relationship="Self.FK_tblServiceProviderCity_tblServiceProvider" FromRole="tblServiceProviderCity" ToRole="tblServiceProvider" />
+        </EntityType>
+        <Association Name="FK_tblCustomer_tblCustomer">
+          <End Role="tblServiceProvider" Type="Self.tblServiceProvider" Multiplicity="0..1" />
+          <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblServiceProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblCustomer">
+              <PropertyRef Name="ServiceTaken" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblServiceProviderCity_tblServiceProvider">
+          <End Role="tblServiceProvider" Type="Self.tblServiceProvider" Multiplicity="0..1" />
+          <End Role="tblServiceProviderCity" Type="Self.tblServiceProviderCity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblServiceProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblServiceProviderCity">
+              <PropertyRef Name="ServiceProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB_Ashish_GargEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblCustomers" EntityType="Self.tblCustomer" />
+          <EntitySet Name="tblServiceProviders" EntityType="Self.tblServiceProvider" />
+          <EntitySet Name="tblServiceProviderCities" EntityType="Self.tblServiceProviderCity" />
+          <AssociationSet Name="FK_tblCustomer_tblCustomer" Association="Self.FK_tblCustomer_tblCustomer">
+            <End Role="tblServiceProvider" EntitySet="tblServiceProviders" />
+            <End Role="tblCustomer" EntitySet="tblCustomers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblServiceProviderCity_tblServiceProvider" Association="Self.FK_tblServiceProviderCity_tblServiceProvider">
+            <End Role="tblServiceProvider" EntitySet="tblServiceProviders" />
+            <End Role="tblServiceProviderCity" EntitySet="tblServiceProviderCities" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DB_Ashish_GargModelStoreContainer" CdmEntityContainer="DB_Ashish_GargEntities">
+          <EntitySetMapping Name="tblCustomers">
+            <EntityTypeMapping TypeName="DB_Ashish_GargModel.tblCustomer">
+              <MappingFragment StoreEntitySet="tblCustomer">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ServiceTaken" ColumnName="ServiceTaken" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblServiceProviders">
+            <EntityTypeMapping TypeName="DB_Ashish_GargModel.tblServiceProvider">
+              <MappingFragment StoreEntitySet="tblServiceProvider">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblServiceProviderCities">
+            <EntityTypeMapping TypeName="DB_Ashish_GargModel.tblServiceProviderCity">
+              <MappingFragment StoreEntitySet="tblServiceProviderCity">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ServiceProviderId" ColumnName="ServiceProviderId" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
